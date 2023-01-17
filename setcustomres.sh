@@ -84,7 +84,7 @@ setCustomRes()
     # echo "Status: $status"
     
     if [[ $status = "false" ]]; then
-        xrandr --newmode $(echo $cvt)
+        xrandr --newmode $(echo $cvt) 2> /dev/null
         xrandr --addmode "$output" "$mode"
     fi
     
