@@ -1,5 +1,6 @@
-# Set Custom Resolution (using `xrandr`)
-This tool helps users set custom resolutions to monitors that aren't there by default (using `xrandr`).
+# Set Custom Resolutions (using `xrandr`)
+This tool helps users set custom resolutions to monitors that aren't available by default (using `xrandr`).
+>NOTE: This script only works on X11
 # Example usage:
 ```bash
 # This sets a custom resolution to HDMI-1
