@@ -27,15 +27,12 @@ sudo ./setup.sh uninstall
 You may install `setcustomres` from the AUR:
 ```bash
 # Using 'yay'
-
 yay -S setcustomres
 
 # Using 'pamac'
-
 pamac install setcustomres
 
 # Manually
-
 git clone https://aur.archlinux.org/setcustomres.git
 cd setcustomres
 makepkg PKGBUILD
