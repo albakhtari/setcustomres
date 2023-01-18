@@ -15,15 +15,28 @@ This tool helps users set custom resolutions to monitors that aren't available b
 # Clone github repository
 git clone https://www.github.com/YoungFellow-le/setcustomres.git
 
-# Make file executable
+# Install
 cd setcustomres
-chmod u+x setcustomres.sh
+chmod u+x setup.sh
+sudo ./setup.sh install
 
-# Make command native (optional)
-sudo ln -s $PWD/setcustomres.sh /usr/bin/setcustomres
+# Uninstall
+sudo ./setup.sh uninstall
 ```
 ## On Arch based distros:
 You may install `setcustomres` from the AUR:
-```
+```bash
+# Using 'yay'
+
 yay -S setcustomres
+
+# Using 'pamac'
+
+pamac install setcustomres
+
+# Manually
+
+git clone https://aur.archlinux.org/setcustomres.git
+cd setcustomres
+makepkg PKGBUILD
 ```
