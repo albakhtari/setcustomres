@@ -4,11 +4,13 @@ This tool helps users set custom resolutions to monitors that aren't available b
 # Example usage:
 ```bash
 # This sets a custom resolution to HDMI-1
-~$ setcustomres 1920 1080 HDMI-1
+~$ setcustomres -w 1920 -h 1080 -o HDMI-1
+
 # This sets a custom resolution to DP-1 and maps it to the right of VGA-1
-~$ setcustomres 1366 768 DP-1 "--right-of VGA-1"
+~$ setcustomres --width 1366 --height 768 --output DP-1 --param "--right-of VGA-1"
+
 # This sets a custom resolution to VGA-2 and makes it the primary screen
-~$ setcustomres 1680 1050 VGA-2 "--primary"
+~$ setcustomres -w 1680 -h 1050 -o VGA-2 -p "--primary"
 ```
 # Installation:
 ```bash
