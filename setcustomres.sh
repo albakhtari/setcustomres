@@ -108,7 +108,7 @@ setCustomRes()
 flags() {
 
     if [[ "$#" -eq 0 ]]; then
-        printError "Missing arguments, parse \"--help\" for examples"
+        printError "Missing arguments, parse \"--help\" for more information"
     fi
 
     width=""
