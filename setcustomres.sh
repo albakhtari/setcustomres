@@ -12,18 +12,19 @@ cyan=$'\e[1;36m'
 magenta=$'\e[1;35m'
 
 number='^[0-9]+$'
-version="2.0"
+version="2.1"
 
 
 help()
 {
     echo "${yellow}Description:${reset} Set custom resolution to a display using ${bold}xrandr${reset}"
     echo "${yellow}Usage:${reset} setcustomres OPTIONS"
+    echo "${yellow}Version:${reset} $version"
     echo ""
     echo "-w | --width            ${bold}Mandatory:${reset} Width of resolution"
     echo "-h | --height           ${bold}Mandatory:${reset} Hight of resolution"
     echo "-o | --output           ${bold}Mandatory:${reset} Display output"
-    echo ""
+    echo "-r | --refresh-rate     Custom refresh rate (Default 60Hz)"
     echo "-p | --param            xrandr parameters, wrap with double quotes"
     echo "--help                  Print this help message"
     echo ""
@@ -39,6 +40,9 @@ help()
     echo ""
     echo "${cyan}# This sets a custom resolution to VGA-2 and makes it the primary screen${reset}"
     echo "${blue}~\$${reset} ${green}setcustomres${reset} ${magenta}-w${reset} 1680 ${magenta}-h${reset} 1050 ${magenta}-o${reset} VGA-2 ${magenta}-p${reset} ${light_blue}\"--primary\"${reset}"
+    echo ""
+    echo "${cyan}# This sets a custom resolution to HDMI-1 with a refresh rate of 120Hz${reset}"
+    echo "${blue}~\$${reset} ${green}setcustomres${reset} ${magenta}-w${reset} 1600 ${magenta}-h${reset} 900 ${magenta}-o${reset} HDMI-1 ${magenta}-r${reset} 120"
 }
 
 printMessage() 
@@ -74,28 +78,26 @@ checkMonitorStatus()
     echo $monitor_set
 }
 
-setCustomRes() 
+set_resolution() 
 {
     width=$1
     height=$2
-    res="$1x$2"
     output=$3
     param=$4
+    refresh=$5
+    res="${width}x${height}$([[ "${refresh}" ]] && echo "_${refresh}")"
     
-    printMessage "Setting custom resolution of $res to output $output $([[ "$param" ]] && echo "with flags: $param")"
+    printMessage "Setting custom resolution of ${width}x${height} to output $output $([[ "$refresh" ]] && echo "at a refresh rate of ${refresh}Hz") $([[ "$param" ]] && echo "\n    With flags: $param")"
 
     monitor_connected=$(xrandr --listactivemonitors | grep " $output")
 
     if [[ $monitor_connected = "" ]]; then
-        echo "${red}ERROR:${reset} Monitor is not active!"
-        exit 1
+        printError "Monitor $output is not active!"
     fi
     
-    cvt=$(echo $res $(cvt "$width" "$height" | tail -1 | cut -d ' ' -f3-))
+    [[ "$refresh" ]] && cvt="$(echo $res $(cvt "$width" "$height" "$refresh" | tail -1 | cut -d ' ' -f3-))" || cvt="$(echo $res $(cvt "$width" "$height" | tail -1 | cut -d ' ' -f3-))"
     mode=$(echo $cvt | cut -d ' ' -f1)
     status=$(checkMonitorStatus $output $res)
-
-    # echo "Status: $status"
     
     if [[ $status = "false" ]]; then
         xrandr --newmode $(echo $cvt) 2> /dev/null
@@ -110,10 +112,6 @@ flags() {
     if [[ "$#" -eq 0 ]]; then
         printError "Missing arguments, parse \"--help\" for more information"
     fi
-
-    width=""
-    height=""
-    output=""
 
     while [[ "$1" != "" ]]
     do
@@ -146,6 +144,16 @@ flags() {
                     printError "\"-h|--height\" requires a non-empty argument"
                 fi
                 ;;
+            -r|--refresh-rate)
+                if [[ ! $2 =~ $number ]]; then
+                    printError "Invalid value parsed! Only numbers are applicable."
+                elif [ "$2" ]; then
+                    shift
+                    refresh="$1"
+                else
+                    printError "\"-r|--refresh-rate\" requires a non-empty argument"
+                fi
+                ;;
             -o|--output)
                 if [ "$2" ]; then
                     shift
@@ -176,20 +184,19 @@ flags() {
         shift
     done
 
-    if [[ "$width" = "" ]]; then
+    if [[ ! "$width" ]]; then
         printError "Missing width value!"
     fi
 
-    if [[ "$height" = "" ]]; then
+    if [[ ! "$height" ]]; then
         printError "Missing height value!"
     fi
 
-    if [[ "$output" = "" ]]; then
+    if [[ ! "$output" ]]; then
         printError "Missing output!"
     fi
 
 }
 
-flags "$@"
-
-setCustomRes "$width" "$height" "$output" "$param"
+flags "$@" # Deal with flags
+set_resolution "$width" "$height" "$output" "$param" "$refresh" # Call set_resolution

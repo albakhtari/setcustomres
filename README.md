@@ -11,6 +11,9 @@ This tool helps users set custom resolutions to monitors that aren't available b
 
 # This sets a custom resolution to VGA-2 and makes it the primary screen
 ~$ setcustomres -w 1680 -h 1050 -o VGA-2 -p "--primary"
+
+# This sets a custom resolution to HDMI-1 with a refresh rate of 120Hz
+~$ setcustomres -w 1600 -h 900 -o HDMI-1 -r 120
 ```
 # Installation:
 ```bash
