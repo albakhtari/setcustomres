@@ -43,4 +43,4 @@ cd setcustomres
 makepkg PKGBUILD
 ```
 # Screenshot:
-![image](https://user-images.githubusercontent.com/79008923/213722911-eb64cbb4-837d-4a97-983f-ae85d0ea18fb.png)
+![image](https://i.imgur.com/rWvngeh.png)
