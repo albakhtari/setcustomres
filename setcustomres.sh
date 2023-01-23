@@ -18,7 +18,7 @@ version="2.1"
 help()
 {
     echo "${yellow}Description:${reset} Set custom resolution to a display using ${bold}xrandr${reset}"
-    echo "${yellow}Usage:${reset} setcustomres OPTIONS"
+    echo "${yellow}Usage:${reset} setcustomres -w WIDTH -h HIGHT -o OUTPUT [OPTIONS]..."
     echo "${yellow}Version:${reset} $version"
     echo ""
     echo "-w | --width            ${bold}Mandatory:${reset} Width of resolution"
@@ -184,18 +184,9 @@ flags() {
         shift
     done
 
-    if [[ ! "$width" ]]; then
-        printError "Missing width value!"
+    if [[ ! "$width" ]] || [[ ! "$height" ]] || [[ ! "$output" ]]; then
+        printError "Missing arguments, parse \"--help\" for more information"
     fi
-
-    if [[ ! "$height" ]]; then
-        printError "Missing height value!"
-    fi
-
-    if [[ ! "$output" ]]; then
-        printError "Missing output!"
-    fi
-
 }
 
 flags "$@" # Deal with flags
