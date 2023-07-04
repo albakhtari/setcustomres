@@ -43,4 +43,4 @@ cd setcustomres
 makepkg PKGBUILD
 ```
 # Screenshot:
-![image](https://i.imgur.com/rWvngeh.png)
+![image](https://github.com/MisconceivedSec/setcustomres/assets/79008923/479c4ce2-99dc-4fba-a664-bf96c9276d90)
