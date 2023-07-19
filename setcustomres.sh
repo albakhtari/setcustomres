@@ -12,21 +12,22 @@ cyan=$'\e[1;36m'
 magenta=$'\e[1;35m'
 
 number='^[0-9]+$'
-version="2.1"
+version="2.2"
 
 
 help()
 {
     echo "${yellow}Description:${reset} Set custom resolution to a display using ${bold}xrandr${reset}"
-    echo "${yellow}Usage:${reset} setcustomres -w WIDTH -h HIGHT -o OUTPUT [OPTIONS]..."
+    echo "${yellow}Usage:${reset} setcustomres [OPTIONS]..."
     echo "${yellow}Version:${reset} $version"
     echo ""
-    echo "-w | --width            ${bold}Mandatory:${reset} Width of resolution"
-    echo "-h | --height           ${bold}Mandatory:${reset} Hight of resolution"
-    echo "-o | --output           ${bold}Mandatory:${reset} Display output"
-    echo "-r | --refresh-rate     Custom refresh rate (Default 60Hz)"
-    echo "-p | --param            xrandr parameters, wrap with double quotes"
-    echo "--help                  Print this help message"
+    echo "${magenta}-w${reset} | ${magenta}-width${reset} <integer>            ${bold}Mandatory:${reset} Width of resolution"
+    echo "${magenta}-h${reset} | ${magenta}-height${reset} <integer>           ${bold}Mandatory:${reset} Hight of resolution"
+    echo "${magenta}-o${reset} | ${magenta}-output${reset} <string>            ${bold}Mandatory:${reset} Display output"
+    echo "${magenta}-r${reset} | ${magenta}-refresh-rate${reset} <integer>     Custom refresh rate (Default 60Hz)"
+    echo "${magenta}-p${reset} | ${magenta}-param${reset} ${light_blue}\"<string>\"${reset}           Xrandr parameters - Wrap with double quotes"
+    echo "${magenta}-u${reset} | ${magenta}-update${reset} <path>              ${bold}Standalone:${reset} Update setcustomres (requires path to setcutomres local repository)"
+    echo "${magenta}-help${reset}                            ${bold}Standalone:${reset} Print this help message"
     echo ""
     echo ""
     echo ""
@@ -36,7 +37,7 @@ help()
     echo "${blue}~\$${reset} ${green}setcustomres${reset} ${magenta}-w${reset} 1920 ${magenta}-h${reset} 1080 ${magenta}-o${reset} HDMI-1"
     echo ""
     echo "${cyan}# This sets a custom resolution to DP-1 and maps it to the right of VGA-1${reset}"
-    echo "${blue}~\$${reset} ${green}setcustomres${reset} ${magenta}--width${reset} 1366 ${magenta}--height${reset} 768 ${magenta}--output${reset} DP-1 ${magenta}--param${reset} ${light_blue}\"--right-of VGA-1\"${reset}"
+    echo "${blue}~\$${reset} ${green}setcustomres${reset} ${magenta}-width${reset} 1366 ${magenta}-height${reset} 768 ${magenta}-output${reset} DP-1 ${magenta}-param${reset} ${light_blue}\"--right-of VGA-1\"${reset}"
     echo ""
     echo "${cyan}# This sets a custom resolution to VGA-2 and makes it the primary screen${reset}"
     echo "${blue}~\$${reset} ${green}setcustomres${reset} ${magenta}-w${reset} 1680 ${magenta}-h${reset} 1050 ${magenta}-o${reset} VGA-2 ${magenta}-p${reset} ${light_blue}\"--primary\"${reset}"
@@ -87,7 +88,7 @@ set_resolution()
     refresh=$5
     res="${width}x${height}$([[ "${refresh}" ]] && echo "_${refresh}")"
     
-    printMessage "Setting custom resolution of ${width}x${height} to output $output $([[ "$refresh" ]] && echo "at a refresh rate of ${refresh}Hz") $([[ "$param" ]] && echo "\n    With flags: $param")"
+    printMessage "Setting custom resolution of ${width}x${height} to output $output $([[ "$refresh" ]] && echo "at a refresh rate of ${refresh}Hz") $([[ "$param" ]] && echo "\n            With flags: ${reset}${magenta}$param")"
 
     monitor_connected=$(xrandr --listactivemonitors | grep " $output")
 
@@ -110,68 +111,80 @@ set_resolution()
 flags() {
 
     if [[ "$#" -eq 0 ]]; then
-        printError "Missing arguments, parse \"--help\" for more information"
+        printError "Missing arguments, parse \"-help\" for more information"
     fi
 
     while [[ "$1" != "" ]]
     do
         case $1 in
-            -v|--version)
+            -v|-version)
                 echo "setcustomres v$version"
                 exit
                 ;;
-            --help)
+            -help)
                 help
                 exit
                 ;;
-            -w|--width)
+            -w|-width)
                 if [[ ! $2 =~ $number ]]; then
                     printError "Invalid value parsed! Only numbers are applicable."
                 elif [ "$2" ]; then
                     shift
                     width="$1"
                 else
-                    printError "\"-w|--width\" requires a non-empty argument"
+                    printError "\"-w|-width\" requires a non-empty argument"
                 fi
                 ;;
-            -h|--height)
+            -h|-height)
                 if [[ ! $2 =~ $number ]]; then
                     printError "Invalid value parsed! Only numbers are applicable."
                 elif [ "$2" ]; then
                     shift
                     height="$1"
                 else
-                    printError "\"-h|--height\" requires a non-empty argument"
+                    printError "\"-h|-height\" requires a non-empty argument"
                 fi
                 ;;
-            -r|--refresh-rate)
+            -r|-refresh-rate)
                 if [[ ! $2 =~ $number ]]; then
                     printError "Invalid value parsed! Only numbers are applicable."
                 elif [ "$2" ]; then
                     shift
                     refresh="$1"
                 else
-                    printError "\"-r|--refresh-rate\" requires a non-empty argument"
+                    printError "\"-r|-refresh-rate\" requires a non-empty argument"
                 fi
                 ;;
-            -o|--output)
+            -o|-output)
                 if [ "$2" ]; then
                     shift
                     output="$1"
                 else
-                    printError "\"-o|--output\" requires a non empty arguments"
+                    printError "\"-o|-output\" requires a non empty arguments"
                 fi
                 ;;
-            -p|--param)
+            -p|-param)
                 if [ "$2" ]; then
                     shift
                     param="$1"
                 else
-                    printError "\"-p|--param\" requires a non empty arguments"
+                    printError "\"-p|-param\" requires a non empty arguments"
                 fi
                 ;;
-            --)
-                break
+            -u|-update)
+                if [[ "$2" ]]; then
+                    shift  
+                    if [[ -d "$1" && $(basename $1) = *"setcustomres"* ]]; then
+                        cd $1
+                        printMessage "Updating 'setcustomres'"
+                        sudo ./setup.sh install
+                        cd - &> /dev/null
+                        shift
+                    else
+                        printError "\"-u|-update\" requires a path to the local setcustomres repository"
+                    fi
+                fi
+                exit
                 ;;
             -?*)
                 printError "Unknown option: $1"
@@ -185,7 +198,7 @@ flags() {
     done
 
     if [[ ! "$width" ]] || [[ ! "$height" ]] || [[ ! "$output" ]]; then
-        printError "Missing arguments, parse \"--help\" for more information"
+        printError "Missing arguments, parse \"-help\" for more information"
     fi
 }
 

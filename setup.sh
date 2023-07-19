@@ -28,7 +28,7 @@ elif [[ "$1" = "install" || "$1" = "i" ]]; then
     sudo -u $realuser git pull origin main
 
     echo ""
-    read -n1 -p "Are you sure you want to install setcustomres? [Y/N] : " userinput
+    read -n1 -p "Are you sure you want to install setcustomres? [y/N] : " userinput
 
     case $userinput in
       y|Y) sudo install -Dm755 setcustomres.sh /usr/bin/setcustomres; \
