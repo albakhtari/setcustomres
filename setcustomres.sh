@@ -27,6 +27,7 @@ help()
     echo "${magenta}-r${reset} | ${magenta}-refresh-rate${reset} <integer>     Custom refresh rate (Default 60Hz)"
     echo "${magenta}-p${reset} | ${magenta}-param${reset} ${light_blue}\"<string>\"${reset}           Xrandr parameters - Wrap with double quotes"
     echo "${magenta}-u${reset} | ${magenta}-update${reset} <path>              ${bold}Standalone:${reset} Update setcustomres (requires path to setcutomres local repository)"
+    echo "${magenta}-v${reset} | ${magenta}-version${reset}                    ${bold}Standalone:${reset} Print version"
     echo "${magenta}-help${reset}                            ${bold}Standalone:${reset} Print this help message"
     echo ""
     echo ""
