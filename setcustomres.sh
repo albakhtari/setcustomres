@@ -12,7 +12,7 @@ cyan=$'\e[1;36m'
 magenta=$'\e[1;35m'
 
 number='^[0-9]+$'
-version="2.2"
+version="2.2.1"
 
 
 help()
@@ -29,22 +29,6 @@ help()
     echo "${magenta}-u${reset} | ${magenta}-update${reset} <path>              ${bold}Standalone:${reset} Update setcustomres (requires path to setcutomres local repository)"
     echo "${magenta}-v${reset} | ${magenta}-version${reset}                    ${bold}Standalone:${reset} Print version"
     echo "${magenta}-help${reset}                            ${bold}Standalone:${reset} Print this help message"
-    echo ""
-    echo ""
-    echo ""
-    echo "          ---Usage Examples---"
-    echo ""
-    echo "${cyan}# This sets a custom resolution to HDMI-1${reset}"
-    echo "${blue}~\$${reset} ${green}setcustomres${reset} ${magenta}-w${reset} 1920 ${magenta}-h${reset} 1080 ${magenta}-o${reset} HDMI-1"
-    echo ""
-    echo "${cyan}# This sets a custom resolution to DP-1 and maps it to the right of VGA-1${reset}"
-    echo "${blue}~\$${reset} ${green}setcustomres${reset} ${magenta}-width${reset} 1366 ${magenta}-height${reset} 768 ${magenta}-output${reset} DP-1 ${magenta}-param${reset} ${light_blue}\"--right-of VGA-1\"${reset}"
-    echo ""
-    echo "${cyan}# This sets a custom resolution to VGA-2 and makes it the primary screen${reset}"
-    echo "${blue}~\$${reset} ${green}setcustomres${reset} ${magenta}-w${reset} 1680 ${magenta}-h${reset} 1050 ${magenta}-o${reset} VGA-2 ${magenta}-p${reset} ${light_blue}\"--primary\"${reset}"
-    echo ""
-    echo "${cyan}# This sets a custom resolution to HDMI-1 with a refresh rate of 120Hz${reset}"
-    echo "${blue}~\$${reset} ${green}setcustomres${reset} ${magenta}-w${reset} 1600 ${magenta}-h${reset} 900 ${magenta}-o${reset} HDMI-1 ${magenta}-r${reset} 120"
 }
 
 printMessage() 
