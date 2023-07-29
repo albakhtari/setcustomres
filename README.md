@@ -44,5 +44,3 @@ git clone https://aur.archlinux.org/setcustomres.git
 cd setcustomres
 makepkg PKGBUILD
 ```
-# Screenshot:
-![image](https://i.imgur.com/gZO7LVs.png)
