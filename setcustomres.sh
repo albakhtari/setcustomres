@@ -1,44 +1,43 @@
 #!/bin/bash
 
-red=$'\e[1;31m'
-yellow=$'\e[1;93m'
-green=$'\e[1;32m'
-blue=$'\e[1;34m'
+red=$'\e[31m'
+yellow=$'\e[93m'
+blue=$'\e[34m'
+dull_blue=$'\e[94m'
+magenta=$'\e[35m'
+
 bold=$'\e[1m'
+underline=$'\e[4m'
+
 reset=$'\e[0m'
-light_blue=$'\e[94m'
-green=$'\e[1;32m'
-cyan=$'\e[1;36m'
-magenta=$'\e[1;35m'
 
 number='^[0-9]+$'
-version="2.2.1"
-
+version="2.3"
 
 help()
 {
-    echo "${yellow}Description:${reset} Set custom resolution to a display using ${bold}xrandr${reset}"
-    echo "${yellow}Usage:${reset} setcustomres [OPTIONS]..."
-    echo "${yellow}Version:${reset} $version"
+    echo "${bold}${yellow}Description:${reset} Set custom resolution to a display using ${bold}xrandr${reset}"
+    echo "${bold}${yellow}Usage:${reset} $0 [OPTIONS]..."
+    echo "${bold}${yellow}Version:${reset} $version"
     echo ""
-    echo "${magenta}-w${reset} | ${magenta}-width${reset} <integer>            ${bold}Mandatory:${reset} Width of resolution"
-    echo "${magenta}-h${reset} | ${magenta}-height${reset} <integer>           ${bold}Mandatory:${reset} Hight of resolution"
-    echo "${magenta}-o${reset} | ${magenta}-output${reset} <string>            ${bold}Mandatory:${reset} Display output"
-    echo "${magenta}-r${reset} | ${magenta}-refresh-rate${reset} <integer>     Custom refresh rate (Default 60Hz)"
-    echo "${magenta}-p${reset} | ${magenta}-param${reset} ${light_blue}\"<string>\"${reset}           Xrandr parameters - Wrap with double quotes"
-    echo "${magenta}-u${reset} | ${magenta}-update${reset} <path>              ${bold}Standalone:${reset} Update setcustomres (requires path to setcutomres local repository)"
-    echo "${magenta}-v${reset} | ${magenta}-version${reset}                    ${bold}Standalone:${reset} Print version"
-    echo "${magenta}-help${reset}                            ${bold}Standalone:${reset} Print this help message"
+    echo "${magenta}-w${reset} | ${magenta}-width${reset} <width>                        ${bold}Mandatory:${reset} Width of resolution"
+    echo "${magenta}-h${reset} | ${magenta}-height${reset} <height>                      ${bold}Mandatory:${reset} Hight of resolution"
+    echo "${magenta}-o${reset} | ${magenta}-output${reset} <output>                      ${bold}Mandatory:${reset} Display output"
+    echo "${magenta}-r${reset} | ${magenta}-refresh-rate${reset} <refresh rate>          Custom refresh rate (Default 60Hz)"
+    echo "${magenta}-p${reset} | ${magenta}-param${reset} ${dull_blue}\"<parameter> [parameter]...\"${reset}   ${underline}xrandr${reset} parameters - wrap with double quotes"
+    echo "${magenta}-u${reset} | ${magenta}-update${reset} <path>                        ${bold}Standalone:${reset} Update setcustomres repo"
+    echo "${magenta}-v${reset} | ${magenta}-version${reset}                              ${bold}Standalone:${reset} Print version"
+    echo "${magenta}-help${reset}                                      ${bold}Standalone:${reset} Print this help message"
 }
 
 printMessage() 
 {
-    echo -e "\n    ${yellow}[+]${reset} ${bold}$1${reset} \n"
+    echo -e "\n    ${bold}${blue}[+]${reset} ${bold}$1${reset} \n"
 }
 
 printError()
 {
-    echo -e "\n${red}ERROR:${reset} ${bold}$1${reset} \n"
+    echo -e "${red}ERROR:${reset} ${bold}$1${reset}"
     exit 1
 }
 
